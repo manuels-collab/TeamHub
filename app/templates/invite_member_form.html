@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Invite Member to {{ org.name }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='em.css') }}">
+</head>
+<body>
+    <div id="invite-member-container" class="form-container">
+        <header class="form-header">
+            <h2>Invite Member</h2>
+            <p class="subtext">Granting access workspace privileges to <strong>{{ org.name }}</strong></p>
+        </header>
+
+        {% if error %}
+            <div id="invite-error" class="auth-alert alert-danger" role="alert">
+                {{ error }}
+            </div>
+        {% endif %}
+
+        <form id="invite-member-form" action="{{ url_for('org.invite_members', org_id=org.id) }}" method="POST">
+            
+            <div class="form-group">
+                <label for="email" class="form-label">User Email Address</label>
+                <input type="email" id="email" name="email" class="form-input" placeholder="user@example.com" required>
+            </div>
+
+            <div class="form-group">
+                <label for="roles" class="form-label">Assign Workspace Role</label>
+                <select id="roles" name="roles" class="form-select" required>
+                    <option value="" disabled selected>Select a role tier...</option>
+                    <option value="member">Member (Standard Access)</option>
+                    <option value="manager">Manager (Elevated Controls)</option>
+                    <option value="admin">Admin (Full Ownership Permissions)</option>
+                </select>
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" id="invite-submit-btn" class="btn btn-primary">Send Invitation</button>
+                <a href="{{ url_for('org.get_org_details', org_id=org.id) }}" id="invite-cancel-btn" class="btn btn-secondary">Cancel</a>
+            </div>
+
+        </form>
+    </div>
+</body>
+</html>

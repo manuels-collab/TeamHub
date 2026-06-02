@@ -1,0 +1,179 @@
+/* Base Styles & Dark Theme */
+:root {
+    --bg-color: #0d0914; /* Deep space black/purple */
+    --card-bg: #161022; /* Lighter purple-black for containers */
+    --text-primary: #e0e0e0;
+    --text-secondary: #a09cb4;
+    --accent-purple: #9b51e0;
+    --accent-purple-hover: #8039cc;
+    --accent-yellow: #f2c94c;
+    --accent-yellow-hover: #d9b33e;
+    --danger-color: #eb5757;
+    --font-stack: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background-color: var(--bg-color);
+    color: var(--text-primary);
+    font-family: var(--font-stack);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 1.5rem;
+}
+
+/* Responsive Authentication Container */
+.auth-container {
+    background-color: var(--card-bg);
+    width: 100%;
+    max-width: 450px; /* Mobile standard width */
+    padding: 2.5rem;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), 0 0 20px rgba(155, 81, 224, 0.1);
+    border: 1px solid rgba(155, 81, 224, 0.2);
+    transition: max-width 0.3s ease;
+}
+
+/* Header */
+.auth-header h2 {
+    color: var(--accent-yellow);
+    font-size: 1.8rem;
+    text-align: center;
+    margin-bottom: 1.5rem;
+    font-weight: 600;
+}
+
+/* Alerts & Errors */
+.auth-alert {
+    background-color: rgba(235, 87, 87, 0.15);
+    color: var(--danger-color);
+    border: 1px solid var(--danger-color);
+    padding: 0.75rem;
+    border-radius: 6px;
+    margin-bottom: 1.5rem;
+    text-align: center;
+    font-size: 0.9rem;
+}
+
+/* Form Layout (Mobile First default) */
+.auth-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+}
+
+.form-row {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-label {
+    margin-bottom: 0.5rem;
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+}
+
+.form-input {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    background-color: #0f0b18;
+    color: var(--text-primary);
+    border: 1px solid #332a48;
+    border-radius: 6px;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+}
+
+.form-input:focus {
+    outline: none;
+    border-color: var(--accent-purple);
+    box-shadow: 0 0 0 2px rgba(155, 81, 224, 0.2);
+}
+
+/* Button & Actions */
+.btn {
+    width: 100%;
+    padding: 0.75rem;
+    background-color: var(--accent-purple);
+    color: #ffffff;
+    border: none;
+    border-radius: 6px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease, transform 0.1s ease;
+    margin-top: 0.5rem;
+}
+
+.btn:hover {
+    background-color: var(--accent-purple-hover);
+    box-shadow: 0 4px 15px rgba(155, 81, 224, 0.4);
+}
+
+.btn:active {
+    transform: scale(0.99);
+}
+
+/* Footer & Links */
+.auth-footer {
+    margin-top: 1.5rem;
+    text-align: center;
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+}
+
+.auth-link {
+    color: var(--accent-yellow);
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.3s ease;
+}
+
+.auth-link:hover {
+    color: var(--accent-yellow-hover);
+    text-decoration: underline;
+}
+
+/* Large Screens Dynamic Rectangular Grid Layout */
+@media (min-width: 768px) {
+    .auth-container {
+        max-width: 750px; /* Expand the card wide across the screen */
+    }
+
+    .auth-form {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr); /* Split form fields into two equal columns */
+        column-gap: 1.5rem;
+        row-gap: 1.25rem;
+    }
+
+    /* Force the native First Name / Last Name wrapper row to spread evenly */
+    .form-row {
+        grid-column: span 2;
+        flex-direction: row;
+        gap: 1.5rem;
+    }
+
+    .form-row .col {
+        flex: 1;
+    }
+
+    /* Span full width components across both columns to balanced the grid geometry */
+    .auth-form .form-group:nth-child(3), /* Email or Username fields if single */
+    .btn {
+        grid-column: span 2;
+    }
+}

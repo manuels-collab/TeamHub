@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ organization.name }} - Details</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='org_details.css') }}">
+</head>
+<body>
+    <div id="org-details-container" class="dashboard-container">
+        
+        <header class="dashboard-header">
+            <a href="{{ url_for('org.get_orgs') }}" class="btn btn-secondary">&larr; Back to Organizations</a>
+            <h1 class="org-title">{{ organization.name }}</h1>
+            <p class="org-slug"><strong>Slug:</strong> /{{ organization.slug }}</p>
+        </header>
+
+        <hr class="section-divider">
+
+        <section class="org-info-section">
+            <h3>Description</h3>
+            <p class="org-description">
+                {{ organization.description if organization.description else "No description provided for this organization." }}
+            </p>
+        </section>
+
+        <section id="org-members-section" class="management-section">
+            <div class="section-header-row">
+                <h3>Active Members</h3>
+                <a href="{{ url_for('org.invite_members', org_id=organization.id) }}" class="btn btn-primary">+ Invite Member</a>
+            </div>
+
+            {% if error %}
+                <div class="auth-alert alert-danger">{{ error }}</div>
+            {% endif %}
+
+            <table id="members-table" class="data-table">
+                <thead>
+                    <tr>
+                        <th>Username</th>
+                        <th>Role Name</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for member in members %}
+                        <tr class="member-row">
+                            <td class="member-name">{{ member.username }}</td>
+                            <td><span class="badge role-{{ member.role }}">{{ member.role }}</span></td>
+                            <td>
+                                <form action="{{ url_for('org.delete_members', org_id=organization.id, user_id=member.user_id) }}" method="POST" onsubmit="return confirm('Are you sure you want to remove this member?');">
+                                    <button type="submit" class="btn btn-danger btn-sm">Remove</button>
+                                </form>
+                            </td>
+                        </tr>
+                    {% else %}
+                        <tr>
+                            <td colspan="3" class="empty-table-text">This organization doesn't have any members yet.</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </section>
+
+    </div>
+</body>
+</html>

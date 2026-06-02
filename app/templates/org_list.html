@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Organizations</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='org_list.css') }}">
+</head>
+<body>
+    <div id="org-list-container" class="dashboard-container">
+        
+        <header class="dashboard-header">
+            <div class="header-title-block">
+                <h1>Organizations Dashboard</h1>
+                <p class="subtext">Manage and view your active organization workspaces</p>
+            </div>
+            <div class="header-action-block">
+                <a href="{{ url_for('org.create_org') }}" id="create-org-btn" class="btn btn-success">+ Create New Org</a>
+                <a href="{{ url_for('auth.logout') }}" id="logout-btn" class="btn btn-secondary">Log Out</a>
+            </div>
+        </header>
+
+        <hr class="section-divider">
+
+        {% if error %}
+            <div class="auth-alert alert-danger" role="alert">
+                {{ error }}
+            </div>
+        {% endif %}
+
+        <main class="dashboard-content">
+            <ul id="organizations-grid" class="org-card-list">
+                {% for org in organisations %}
+                    <li class="org-card" id="org-card-{{ org.id }}">
+                        <div class="org-card-body">
+                            <h3 class="org-card-title">{{ org.name }}</h3>
+                            <span class="org-card-slug">/{{ org.slug }}</span>
+                            <p class="org-card-description">
+                                {{ org.description if org.description else "No description provided for this organization." }}
+                            </p>
+                        </div>
+                        <div class="org-card-footer">
+                            <a href="{{ url_for('org.get_org_details', org_id=org.id) }}" class="btn btn-primary view-details-link">
+                                Open Workspace &rarr;
+                            </a>
+                        </div>
+                    </li>
+                {% else %}
+                    <li class="empty-list-state">
+                        <div class="empty-state-message">
+                            <h3>No Organizations Found</h3>
+                            <p>You aren't a member of any organizations yet. Get started by creating your own workspace!</p>
+                            <a href="{{ url_for('org.create_org') }}" class="btn btn-primary-inline">Create an Organization</a>
+                        </div>
+                    </li>
+                {% endfor %}
+            </ul>
+        </main>
+
+    </div>
+</body>
+</html>

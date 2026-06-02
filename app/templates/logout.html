@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Logout</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='logout.css') }}">
+</head>
+<body>
+    <div id="logout-container" class="auth-container">
+        
+        <header class="auth-header">
+            <h2>Log Out</h2>
+        </header>
+
+        <div class="auth-body">
+            <p class="auth-text">Are you sure you want to log out of your active workspace session?</p>
+        </div>
+
+        <form id="logout-form" class="auth-form" action="{{ url_for('auth.logout') }}" method="POST">
+            <div class="form-actions">
+                <button type="submit" id="logout-submit-btn" class="btn btn-danger">Yes, Log Out</button>
+                <a href="{{ url_for('org.get_orgs') }}" id="logout-cancel-btn" class="btn btn-secondary">Cancel</a>
+            </div>
+        </form>
+
+    </div>
+</body>
+</html>

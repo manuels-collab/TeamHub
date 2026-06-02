@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='register.css') }}">
+</head>
+<body>
+    <div id="register-container" class="auth-container">
+        <header class="auth-header">
+            <h2>Create an Account</h2>
+        </header>
+
+        {% if error %}
+            <div id="register-error" class="auth-alert alert-danger" role="alert">
+                {{ error }}
+            </div>
+        {% endif %}
+
+        <form id="register-form" class="auth-form" action="{{ url_for('auth.register') }}" method="POST">
+            <div class="form-row">
+                <div class="form-group col">
+                    <label for="first_name" class="form-label">First Name</label>
+                    <input type="text" id="first_name" name="first_name" class="form-input" required>
+                </div>
+                <div class="form-group col">
+                    <label for="last_name" class="form-label">Last Name</label>
+                    <input type="text" id="last_name" name="last_name" class="form-input" required>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="username" class="form-label">Username</label>
+                <input type="text" id="username" name="username" class="form-input" required>
+            </div>
+
+            <div class="form-group">
+                <label for="email" class="form-label">Email Address</label>
+                <input type="email" id="email" name="email" class="form-input" required>
+            </div>
+
+            <div class="form-group">
+                <label for="phone_no" class="form-label">Phone Number</label>
+                <input type="tel" id="phone_no" name="phone_no" class="form-input">
+            </div>
+
+            <div class="form-group">
+                <label for="password" class="form-label">Password</label>
+                <input type="password" id="password" name="password" class="form-input" required>
+            </div>
+
+            <button type="submit" id="register-submit-btn" class="btn btn-primary">Sign Up</button>
+
+            {% if error %}<p style="color: red;">{{ error }}</p>{% endif %}
+        </form>
+
+        <footer class="auth-footer">
+            <p>Already have an account? <a href="{{ url_for('auth.login') }}" class="auth-link">Login here</a>.</p>
+        </footer>
+    </div>
+</body>
+</html>

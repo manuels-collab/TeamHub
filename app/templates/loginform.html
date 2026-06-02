@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='auth.css') }}">
+</head>
+<body>
+    <div id="login-container" class="auth-container">
+        <header class="auth-header">
+            <h2>Account Login</h2>
+        </header>
+
+        {% if error %}
+            <div id="login-error" class="auth-alert alert-danger" role="alert">
+                {{ error }}
+            </div>
+        {% endif %}
+
+        <form id="login-form" class="auth-form" action="{{ url_for('auth.login') }}" method="POST">
+            <div class="form-group">
+                <label for="email" class="form-label">Email Address</label>
+                <input type="email" id="email" name="email" class="form-input" placeholder="name@example.com" required>
+            </div>
+
+            <div class="form-group">
+                <label for="password" class="form-label">Password</label>
+                <input type="password" id="password" name="password" class="form-input" placeholder="Enter your password" required>
+            </div>
+
+            <button type="submit" id="login-submit-btn" class="btn btn-primary">Login</button>
+        </form>
+
+        {% if error %}<p style="color: red;">{{ error }}</p>{% endif %}
+
+        <footer class="auth-footer">
+            <p>Don't have an account? <a href="{{ url_for('auth.register') }}" class="auth-link">Register here</a>.</p>
+        </footer>
+    </div>
+</body>
+</html>

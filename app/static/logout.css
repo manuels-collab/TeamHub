@@ -1,0 +1,120 @@
+/* Base Styles & Dark Theme */
+:root {
+    --bg-color: #0d0914; /* Deep space black/purple */
+    --card-bg: #161022; /* Lighter purple-black for containers */
+    --text-primary: #e0e0e0;
+    --text-secondary: #a09cb4;
+    --accent-purple: #9b51e0;
+    --accent-yellow: #f2c94c;
+    --danger-color: #eb5757;
+    --danger-hover: #cf4949;
+    --font-stack: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background-color: var(--bg-color);
+    color: var(--text-primary);
+    font-family: var(--font-stack);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 1.5rem;
+}
+
+/* Auth Container Centered Card */
+.auth-container {
+    background-color: var(--card-bg);
+    width: 100%;
+    max-width: 420px; /* Perfect tight width for modal-like confirmations */
+    padding: 2.5rem;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), 0 0 20px rgba(155, 81, 224, 0.1);
+    border: 1px solid rgba(155, 81, 224, 0.2);
+    text-align: center;
+}
+
+/* Header styling */
+.auth-header h2 {
+    color: var(--accent-yellow);
+    font-size: 1.8rem;
+    font-weight: 600;
+    margin-bottom: 1.25rem;
+}
+
+/* Main text messaging area */
+.auth-body {
+    margin-bottom: 2rem;
+}
+
+.auth-text {
+    color: var(--text-secondary);
+    font-size: 1.05rem;
+    line-height: 1.5;
+}
+
+/* Actions Engine (Mobile Default Setup) */
+.form-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+/* Buttons System */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    padding: 0.75rem 1.5rem;
+    border-radius: 6px;
+    font-size: 1rem;
+    font-weight: 600;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border: none;
+}
+
+.btn-danger {
+    background-color: var(--danger-color);
+    color: #ffffff;
+}
+
+.btn-danger:hover {
+    background-color: var(--danger-hover);
+    box-shadow: 0 4px 15px rgba(235, 87, 87, 0.3);
+}
+
+.btn-secondary {
+    background-color: transparent;
+    color: var(--text-secondary);
+    border: 1px solid #332a48;
+}
+
+.btn-secondary:hover {
+    color: #ffffff;
+    background-color: #1c152a;
+    border-color: #59526d;
+}
+
+/* Desktop Viewport Tuning */
+@media (min-width: 576px) {
+    /* Align buttons side-by-side on larger screens */
+    .form-actions {
+        flex-direction: row;
+        justify-content: center;
+        gap: 1rem;
+    }
+
+    .btn {
+        width: auto;
+        min-width: 140px; /* Gives balanced symmetry to both choices */
+    }
+}
