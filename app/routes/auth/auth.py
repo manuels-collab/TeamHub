@@ -4,7 +4,7 @@ from app.repo.user_repo import User_Repository
 from app.services.AuthService import AuthService
 from app.services.paswordService import PasswordService
 
-auth = Blueprint('auth', __name__, url_prefix='/auth')
+auth = Blueprint('auth', __name__, url_prefix='/')
 
 @auth.route('/', methods=['GET'])
 def home():

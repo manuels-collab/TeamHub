@@ -1,9 +1,9 @@
 
 venv/
-.venv/
-
-
-.env
+alembic
+.idea
+app\.env
+venv
 
 .idea/
 .vscode/

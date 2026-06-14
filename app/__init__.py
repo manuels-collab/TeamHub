@@ -3,7 +3,7 @@ from flask import Flask, url_for, redirect
 from dotenv import load_dotenv
 from flask_jwt_extended import JWTManager
 from sqlalchemy import select
-
+from flask_migrate import Migrate
 
 from .extensions import db, bcrypt
 
@@ -23,8 +23,9 @@ def create_app(test_config=None):
 
     app.config.from_mapping(
         SECRET_KEY=os.getenv("SECRET_KEY", "fallback-secret-key"),
-        SQLALCHEMY_DATABASE_URI=os.getenv("SQLALCHEMY_DATABASE_URI"),
+        SQLALCHEMY_DATABASE_URI=os.getenv("POSTGRES_URI"),
         JWT_SECRET_KEY=os.getenv("JWT_SECRET_KEY", "fallback-jwt-secret"),
+        SQLALCHEMY_ECHO=True,
         JWT_TOKEN_LOCATION=["cookies"],
         JWT_COOKIE_SECURE=False,
         JWT_COOKIE_CSRF_PROTECT=False
@@ -34,6 +35,7 @@ def create_app(test_config=None):
     db.init_app(app)
     bcrypt.init_app(app)
     jwt.init_app(app)
+    migrate = Migrate(app, db)
 
 
     from .routes.auth.auth import auth
