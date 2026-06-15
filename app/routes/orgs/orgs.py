@@ -1,13 +1,27 @@
-from flask import Blueprint, request, render_template, redirect, url_for, flash, jsonify
+from flask import Blueprint, request, render_template, redirect, url_for, abort, jsonify
 from app.repo.member_repo import Member_Repository
 from app.repo.org_repo import Organization_Repository
 from app.repo.user_repo import User_Repository
 from app.services.AuthService import AuthService
+from app.models.dbModel import Organisation, Members # Ensure Member model is imported
 from app.services.roleService import check_role_condition
 from flask_jwt_extended import jwt_required, get_jwt_identity, current_user
 from app.extensions import db
+import base64
 
 org = Blueprint("org", __name__, url_prefix="/orgs")
+
+
+# --- Helper Functions ---
+def encode_cursor(entity_id: int):
+    return base64.urlsafe_b64encode(str(entity_id).encode()).decode()
+
+
+def decode_cursor(token: str):
+    try:
+        return int(base64.urlsafe_b64decode(token.encode()).decode())
+    except Exception as e:
+        abort(400, description=f"Invalid cursor token: {e}")
 
 
 @org.route("/org", methods=['POST', 'GET'])
@@ -53,22 +67,47 @@ def get_orgs():
         "org_list.html",
         organisations=organisations
     )
-    
-    
+
+
+# FIX 1: Normalized path to match query strings instead of rigid path variables
 @org.route("/get_org/<int:org_id>", methods=['GET'])
 @jwt_required()
 def get_org_details(org_id):
     org_item = Organization_Repository.get_organization_by_id(org_id)
     if not org_item:
         return render_template("org_list.html", error="Organization not found"), 404
+
+    cursor_token = request.args.get("cursor", None)
+    
+    try:
+        limit = int(request.args.get("limit", 20))
+        if limit < 1 or limit > 100:
+            limit = 20
+    except ValueError:
+        limit = 20
+
+    query = db.session.query(Members).filter(Members.org_id == org_id).order_by(Members.id.asc())
+    
+    if cursor_token:
+        decoded_id = decode_cursor(cursor_token)
+        query = query.filter(Members.id > decoded_id)
+    
+
+    results = query.limit(limit + 1).all()
         
-    result_data = Member_Repository.get_organisation_members(org_id)
-    members = result_data.get("members", []) if isinstance(result_data, dict) else result_data
+    has_more = len(results) > limit
+    members_to_return = results[:limit]
+
+    next_cursor = None
+    if members_to_return and has_more:
+        next_cursor = encode_cursor(members_to_return[-1].id)
 
     return render_template(
         "org_details.html", 
         organization=org_item, 
-        members=members
+        members=members_to_return, # Passes exactly paginated members
+        next_cursor=next_cursor,
+        has_more=has_more
     )
     
     

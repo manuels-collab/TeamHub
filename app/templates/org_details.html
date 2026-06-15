@@ -46,7 +46,7 @@
                     {% for member in members %}
                         <tr class="member-row">
                             <td class="member-name">{{ member.username }}</td>
-                            <td><span class="badge role-{{ member.role }}">{{ member.role }}</span></td>
+                            <td><span class="badge role-{{ member.role }}">{{ member.role.name }}</span></td>
                             <td>
                                 <form action="{{ url_for('org.delete_members', org_id=organization.id, user_id=member.user_id) }}" method="POST" onsubmit="return confirm('Are you sure you want to remove this member?');">
                                     <button type="submit" class="btn btn-danger btn-sm">Remove</button>
@@ -61,6 +61,14 @@
                 </tbody>
             </table>
         </section>
+
+<!-- The Pagination UI Link Anchor -->
+{% if has_more %}
+  <a href="{{ url_for('org.get_org_details', org_id=organization.id, cursor=next_cursor, limit=20) }}">
+    Next Page →
+  </a>
+{% endif %}
+
 
     </div>
 </body>
