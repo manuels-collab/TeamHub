@@ -31,7 +31,7 @@ class User_Repository:
     def get_user_by_email(email):
         query = select(User).where(User.email == email)
         return db.session.scalars(query).first()
-    
+      
     @staticmethod
     def get_user_by_id(user_id):
         query = select(User).where(User.id == user_id)

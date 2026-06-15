@@ -17,6 +17,8 @@ class Member_Repository:
 
         new_member = Member(user_id=user_id, org_id=org_id, role=role)
         return new_member
+   
+
 
         
     @staticmethod
@@ -84,7 +86,7 @@ class Member_Repository:
             .join(Organisation, Member.org_id == Organisation.id)
             .join(User, Member.user_id == User.id)
             .where(Member.org_id == org_id)
-        )
+        )  
     
         results = db.session.execute(query).all()
     

@@ -1,5 +1,7 @@
 from sqlalchemy import select, update, delete
 from ..models.dbModel import Organisation, db, User
+from sqlalchemy.orm import selectinload
+
 
 class Organization_Repository:
     @staticmethod
@@ -16,13 +18,13 @@ class Organization_Repository:
         
     def get_organizations(user_id):
 
-        query = select(Organisation).where(Organisation.owner_id == user_id)
+        query = select(Organisation).options(selectinload(Organisation.members)).where(Organisation.owner_id == user_id)
         
         orgs = db.session.scalars(query).all() 
         return orgs
     
     def get_organization_by_id(org_id):
-        query = select(Organisation).where(Organisation.id == org_id)
+        query = select(Organisation).options(selectinload(Organisation.members)).where(Organisation.id == org_id)
         org = db.session.scalars(query).first()
         return org
     
