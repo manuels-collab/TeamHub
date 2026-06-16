@@ -144,6 +144,20 @@ def invite_members(org_id):
     return render_template("invite_member_form.html", org=org_item)
 
 
+
+@org.route('/orgs/<int:org_id>/members/search', methods=['GET'])
+@jwt_required()
+def get_members_search(org_id):
+    query = request.args.get('q', '').strip()
+    
+    members = [] 
+    
+    if query:
+        members = Member_Repository.get_member_by_name(query, org_id)
+        
+    return render_template('search_members.html', members=members)
+
+
 @org.route("/delete_members/<int:org_id>/<int:user_id>", methods=['POST'])
 @jwt_required()
 @check_role_condition()

@@ -1,4 +1,4 @@
-from sqlalchemy import select, delete
+from sqlalchemy import select, delete, func, desc
 from ..models.dbModel import Members as Member, db, User, Organisation
 
 class Member_Repository:
@@ -78,6 +78,43 @@ class Member_Repository:
             'role': role_string
         }
     
+    @staticmethod
+    def get_member_by_name(query, org_id):
+        if not query or not query.strip():
+            return []
+        words = [f"{word.strip()}:*" for word in query.split() if word.strip()]
+        tsquery_str = " & ".join(words)
+
+        tsquery = func.to_tsquery('english', tsquery_str)
+        rank_expr = func.ts_rank(User.search_vector, tsquery)
+        
+        stmt = (
+            select(User, Member, rank_expr.label('rank'))
+            .join(User, Member.user_id == User.id)
+            .where(User.search_vector.op('@@')(tsquery)) 
+            .where(Member.org_id == org_id)
+            .order_by(desc('rank'))
+        )
+        
+        result = db.session.execute(stmt).all()
+        
+        if not result:
+            return []
+
+        members_list = []
+        for user, member, rank in result:
+            role_string = member.role.value if hasattr(member.role, 'value') else member.role
+            members_list.append({
+                'id': user.id,
+                'first_name': user.first_name,
+                'last_name': user.last_name,
+                'email': user.email,
+                'role': role_string,
+                'rank': rank  
+            })
+            
+        return members_list
+
     
     @staticmethod
     def get_organisation_members(org_id):

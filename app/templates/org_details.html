@@ -61,6 +61,7 @@
                 </tbody>
             </table>
         </section>
+        <a href="{{ url_for('org.get_members_search', org_id=organization.id) }}">Search Members</a>
 
 <!-- The Pagination UI Link Anchor -->
 {% if has_more %}

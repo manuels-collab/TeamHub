@@ -1,6 +1,7 @@
 import enum
 import os
-from sqlalchemy import String, Integer, ForeignKey, Enum, URL
+from sqlalchemy.dialects.postgresql import TSVECTOR
+from sqlalchemy import String, Integer, ForeignKey, Enum, Index
 from sqlalchemy.orm import DeclarativeBase, mapped_column, Mapped, relationship
 from app.extensions import db
 from typing import List
@@ -24,9 +25,14 @@ class User(db.Model):
     email: Mapped[str] = mapped_column(String(30), nullable=False, unique=True)
     phone_no: Mapped[str] = mapped_column(String(15), nullable=False)
     password_hash: Mapped[str] = mapped_column(String(600), nullable=False)
+    search_vector: Mapped[str] = mapped_column(TSVECTOR, nullable=True)
     
     org: Mapped[List[Organisation]] = relationship(back_populates="user", cascade='all, delete-orphan')
     members: Mapped[List[Members]] = relationship(back_populates="user", cascade='all, delete-orphan')
+    
+    __table_args__ = (
+        Index('idx_user_search_vector', 'search_vector', postgresql_using='gin'),
+    )
     
     
 class Organisation(db.Model):
