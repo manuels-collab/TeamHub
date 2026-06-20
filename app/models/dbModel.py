@@ -34,6 +34,16 @@ class User(db.Model):
         Index('idx_user_search_vector', 'search_vector', postgresql_using='gin'),
     )
     
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "first_name": self.first_name,
+            "last_name": self.last_name,
+            "username": self.username,
+            "email": self.email,
+            "phone_no": self.phone_no
+        }
+    
     
 class Organisation(db.Model):
     __tablename__ = "org"
@@ -46,6 +56,15 @@ class Organisation(db.Model):
     user: Mapped[User] = relationship(back_populates="org")
     members: Mapped[List[Members]] = relationship(back_populates="org", cascade='all, delete-orphan')
     
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "name": self.name,
+            "slug": self.slug,
+            "description": self.description,
+            "owner_id": self.owner_id
+        }
+    
 class Members(db.Model):
     __tablename__ = "members"
     id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
@@ -56,6 +75,14 @@ class Members(db.Model):
     user: Mapped[User] = relationship(back_populates="members")
     org: Mapped[Organisation] = relationship(back_populates="members")
     
+    
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "role": self.role.value,
+            "user_id": self.user_id,
+            "org_id": self.org_id
+        }
     
 #class Workspace(db.Model):
  #   __tablename__ = 'workspace'
